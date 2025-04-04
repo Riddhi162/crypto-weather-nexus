@@ -1,5 +1,12 @@
 import "@/styles/globals.css";
-
-export default function App({ Component, pageProps }) {
-  return <Component {...pageProps} />;
+import { ReduxProvider } from '../components/providers/ReduxProvider';
+import React, { useMemo } from 'react';
+function MyApp({ Component, pageProps }) {
+  return (
+    <ReduxProvider>
+      <Component {...pageProps} />
+    </ReduxProvider>
+  );
 }
+
+export default MyApp;
