@@ -2,8 +2,12 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCityWeather } from '../../store/slices/weatherSlice';
 import { addFavoriteCity, removeFavoriteCity } from '../../store/slices/userPreferencesSlice';
-import { Cloud, CloudRain, CloudSnow, CloudLightning, Sun, CloudSun, Wind, Droplets, Plus, X, Thermometer } from 'lucide-react';
+import { Cloud, CloudRain, CloudSnow, CloudLightning, Sun, CloudSun, Wind, Droplets, Plus, X, Thermometer, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
+// Inside your WeatherSection component:
+
 
 export default function WeatherSection() {
   const dispatch = useDispatch();
@@ -12,7 +16,7 @@ export default function WeatherSection() {
   const [newCity, setNewCity] = useState('');
   const [showAddForm, setShowAddForm] = useState(false);
   const [activeCity, setActiveCity] = useState('London');
-  
+  const router = useRouter();
   // Ensure London is in the favorites when component mounts
   useEffect(() => {
     if (!favoriteCities.includes('London')) {
@@ -21,6 +25,10 @@ export default function WeatherSection() {
     setActiveCity('London');
   }, []);
 
+  const handleViewDetails = (city) => {
+    router.push(`/city/${encodeURIComponent(city)}`);
+  };
+  
   useEffect(() => {
     // Fetch weather data for all cities including active one
     const allCities = [...favoriteCities];
@@ -205,6 +213,24 @@ export default function WeatherSection() {
                     </div>
                   )}
                 </div>
+
+
+                <Link 
+  href={`/city/${encodeURIComponent(activeCity)}`}
+  className={`flex items-center justify-center gap-2 w-1/2 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors ${getTextColor()}`}
+>
+  <span>View Detailed Forecast</span>
+  <ArrowRight size={16} />
+</Link>
+
+{/* <button
+  onClick={() => handleViewDetails(activeCity)}
+  className={`flex items-center justify-center gap-2 w-full py-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors ${getTextColor()}`}
+>
+  <span>View Detailed Forecast</span>
+  <ArrowRight size={16} />
+</button> */}
+
               </motion.div>
             </motion.div>
           )}

@@ -1,24 +1,32 @@
 // components/dashboard/NewsSection.jsx
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCryptoNews } from '../../store/slices/newsSlice';
 import { ExternalLink } from 'lucide-react';
-import React, { useMemo } from 'react';
+import React from 'react';
+
 export default function NewsSection() {
   const dispatch = useDispatch();
-  const { articles, loading, error, lastFetched } = useSelector((state) => state.news);
+  const { articles, loading, error, lastFetched, nextPage } = useSelector((state) => state.news);
 
   useEffect(() => {
-    // Fetch news on component mount
-    dispatch(fetchCryptoNews(5));
+    // Fetch news on component mount - pass null instead of a page number
+    dispatch(fetchCryptoNews({ limit: 5, nextPageToken: null }));
 
     // Refresh news every 5 minutes
     const intervalId = setInterval(() => {
-      dispatch(fetchCryptoNews(5));
+      dispatch(fetchCryptoNews({ limit: 5, nextPageToken: null }));
     }, 5 * 60 * 1000);
 
     return () => clearInterval(intervalId);
   }, [dispatch]);
+
+  // Handler for loading more articles
+  const loadMoreArticles = () => {
+    if (nextPage) {
+      dispatch(fetchCryptoNews({ limit: 5, nextPageToken: nextPage }));
+    }
+  };
 
   // Format publication date
   const formatDate = (dateString) => {
@@ -93,6 +101,18 @@ export default function NewsSection() {
           </div>
         ))}
       </div>
+
+      {articles.length > 0 && nextPage && (
+        <div className="mt-4 text-center">
+          <button 
+            onClick={loadMoreArticles}
+            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+            disabled={loading}
+          >
+            {loading ? 'Loading...' : 'Load More'}
+          </button>
+        </div>
+      )}
 
       {articles.length === 0 && !loading && !error && (
         <div className="text-center py-8 text-gray-500 dark:text-gray-400">
