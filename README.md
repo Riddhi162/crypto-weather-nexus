@@ -42,8 +42,8 @@ CryptoWeather Nexus is a comprehensive dashboard application built with Next.js,
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/cryptoweather-nexus.git
-cd cryptoweather-nexus
+git clone https://github.com/yourusername/crypto-weather-nexus.git
+cd crypto-weather-nexus
 ```
 
 2. Install dependencies:
