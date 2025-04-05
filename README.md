@@ -1,40 +1,121 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# CryptoWeather Nexus
 
-## Getting Started
+A modern, multi-page dashboard that combines weather data, cryptocurrency information, and real-time notifications via WebSocket.
 
-First, run the development server:
+## 🚀 Live Demo
 
+https://crypto-weather-nexus-ld5nnuedk-riddhi-thakkar.vercel.app/
+
+## 📝 Project Overview
+
+CryptoWeather Nexus is a comprehensive dashboard application built with Next.js, React, Redux, and Tailwind CSS. The application provides real-time data on weather conditions, cryptocurrency prices, and crypto-related news headlines. It features WebSocket connections for live price updates and simulated weather alerts, creating an interactive and responsive user experience across all devices.
+
+### Key Features
+
+- **Multi-page architecture** with Dashboard and Detail pages
+- **Real-time data updates** via WebSocket connections
+- **Favorites system** for cities and cryptocurrencies
+- **Responsive design** that works on all screen sizes
+- **Comprehensive state management** with Redux
+- **Graceful error handling** and fallback UI components
+
+## 🛠️ Technologies Used
+
+- **Next.js (v13+)** - React framework with file-based routing
+- **React** - UI library with hooks for state and lifecycle management
+- **Redux** - Global state management with Redux Thunk for async operations
+- **Tailwind CSS** - Utility-first CSS framework
+- **WebSocket API** - For real-time data updates
+- **External APIs**:
+  - OpenWeatherMap - Weather data
+  - CoinCap - Cryptocurrency data and WebSocket
+  - NewsData.io - Crypto news headlines
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js (v16+)
+- npm or yarn
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/cryptoweather-nexus.git
+cd cryptoweather-nexus
+```
+
+2. Install dependencies:
+```bash
+npm install
+# or
+yarn install
+```
+
+3. Create a `.env.local` file in the root directory and add your API keys:
+```
+NEXT_PUBLIC_OPENWEATHERMAP_API_KEY=your_openweathermap_api_key
+NEXT_PUBLIC_NEWSDATA_API_KEY=your_newsdata_api_key
+```
+
+4. Start the development server:
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+## 🌟 Features Explained
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+### Dashboard Sections
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+1. **Weather Section**
+   - Displays current weather for New York, London, and Tokyo
+   - Shows temperature, humidity, and conditions
+   - Option to add/remove cities from favorites
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. **Cryptocurrency Section**
+   - Shows live price, 24h change, and market cap for Bitcoin, Ethereum, and Solana
+   - Real-time price updates via WebSocket
+   - Option to add/remove cryptocurrencies from favorites
 
-## Learn More
+3. **News Section**
+   - Displays top five crypto-related headlines
+   - Links to original news sources
 
-To learn more about Next.js, take a look at the following resources:
+### Detail Pages
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
+1. **City Details**
+   - Extended weather forecast
+   - Historical weather data presented in charts
+   - Additional metrics (wind speed, pressure, visibility)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2. **Crypto Details**
+   - Historical pricing data with interactive charts
+   - Extended metrics (volume, supply, all-time high/low)
+   - Market details and links to exchanges
 
-## Deploy on Vercel
+### Real-Time Updates
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- WebSocket connection to CoinCap for live cryptocurrency price updates
+- Simulated weather alerts for demonstration purposes
+- Notification system for price shifts and weather alerts
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+### Redux State Management
+
+- Global store for user preferences and fetched data
+- Clear loading and error states
+- Persistent storage for favorites
+
+
+
+## 📱 Responsive Design
+
+The application is fully responsive and works on:
+- Mobile devices (320px+)
+- Tablets (768px+)
+- Desktops (1024px+)
+- Large screens (1440px+)
