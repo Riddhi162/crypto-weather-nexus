@@ -6,9 +6,9 @@ const userPreferencesSlice = createSlice({
     favoriteCities: ['New York', 'London', 'Tokyo'],
     favoriteCryptos: ['bitcoin', 'ethereum', 'solana'],
     settings: {
-      temperatureUnit: 'F', // F or C
+      temperatureUnit: 'F',
       autoRefresh: true,
-      refreshInterval: 60000, // 1 minute
+      refreshInterval: 60000,
       theme: 'light',
     }
   },

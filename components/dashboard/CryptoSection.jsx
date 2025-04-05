@@ -7,8 +7,7 @@ import { addFavoriteCrypto, removeFavoriteCrypto } from '../../store/slices/user
 import { ArrowUpIcon, ArrowDownIcon, StarIcon } from 'lucide-react';
 import React from 'react';
 import Button from '../common/Button';
-import { CryptoWebSocketService } from '../../services/websocketService'; // Import the WebSocket service
-
+import { CryptoWebSocketService } from '../../services/websocketService';
 export default function CryptoSection() {
   const dispatch = useDispatch();
   const { prices, loading, error } = useSelector((state) => state.crypto);
@@ -18,34 +17,30 @@ export default function CryptoSection() {
   const [realTimePrices, setRealTimePrices] = useState({});
   const wsServiceRef = useRef(null);
 
-  // List of default cryptos to track
+  
   const defaultCryptos = ['bitcoin', 'ethereum', 'solana'];
 
-  // Handle real-time price updates from WebSocket
+  
   const handleWebSocketMessage = (data) => {
     setRealTimePrices(prevPrices => ({ ...prevPrices, ...data }));
   };
 
-  // Initial data fetch and WebSocket setup
+  
   useEffect(() => {
-    // Get tracked cryptos (default + favorites)
+   
     const cryptosToTrack = [...new Set([...defaultCryptos, ...favoriteCryptos])];
     
-    // Fetch initial data
     dispatch(fetchCryptoPrices(cryptosToTrack));
 
-    // Set up WebSocket connection
     if (!wsServiceRef.current) {
       wsServiceRef.current = new CryptoWebSocketService(handleWebSocketMessage);
     }
     wsServiceRef.current.connect(cryptosToTrack);
 
-    // Set up interval to refresh full data every 60 seconds as a fallback
     const intervalId = setInterval(() => {
       dispatch(fetchCryptoPrices(cryptosToTrack));
     }, 60000);
 
-    // Clean up on unmount
     return () => {
       clearInterval(intervalId);
       if (wsServiceRef.current) {
@@ -54,7 +49,6 @@ export default function CryptoSection() {
     };
   }, [dispatch, favoriteCryptos]);
 
-  // When favorites change, reconnect WebSocket with updated cryptos
   useEffect(() => {
     if (wsServiceRef.current && wsServiceRef.current.isConnected) {
       const cryptosToTrack = [...new Set([...defaultCryptos, ...favoriteCryptos])];
@@ -63,7 +57,6 @@ export default function CryptoSection() {
     }
   }, [favoriteCryptos]);
 
-  // Handle adding a new crypto to track
   const handleAddCrypto = (e) => {
     e.preventDefault();
     if (newCrypto.trim()) {
@@ -72,8 +65,6 @@ export default function CryptoSection() {
       setShowAddForm(false);
     }
   };
-
-  // Toggle favorite status
   const toggleFavorite = (cryptoId) => {
     if (favoriteCryptos.includes(cryptoId)) {
       dispatch(removeFavoriteCrypto(cryptoId));
@@ -82,7 +73,6 @@ export default function CryptoSection() {
     }
   };
 
-  // Format price with commas
   const formatPrice = (price) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -92,7 +82,6 @@ export default function CryptoSection() {
     }).format(price);
   };
 
-  // Format market cap
   const formatMarketCap = (marketCap) => {
     if (marketCap >= 1000000000) {
       return `$${(marketCap / 1000000000).toFixed(2)}B`;
@@ -103,17 +92,13 @@ export default function CryptoSection() {
     }
   };
 
-  // Get the most up-to-date price (either from WebSocket or API)
   const getCurrentPrice = (crypto) => {
-    // If we have real-time data for this crypto, use it
     if (realTimePrices[crypto.id]) {
       return parseFloat(realTimePrices[crypto.id]);
     }
-    // Otherwise fall back to API data
     return crypto.current_price;
   };
 
-  // Check if price has changed in real-time
   const hasPriceChanged = (crypto) => {
     return realTimePrices[crypto.id] !== undefined;
   };

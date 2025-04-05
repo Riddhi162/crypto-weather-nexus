@@ -10,10 +10,10 @@ export default function NewsSection() {
   const { articles, loading, error, lastFetched, nextPage } = useSelector((state) => state.news);
 
   useEffect(() => {
-    // Fetch news on component mount - pass null instead of a page number
+ 
     dispatch(fetchCryptoNews({ limit: 5, nextPageToken: null }));
 
-    // Refresh news every 5 minutes
+    
     const intervalId = setInterval(() => {
       dispatch(fetchCryptoNews({ limit: 5, nextPageToken: null }));
     }, 5 * 60 * 1000);
@@ -21,14 +21,14 @@ export default function NewsSection() {
     return () => clearInterval(intervalId);
   }, [dispatch]);
 
-  // Handler for loading more articles
+ 
   const loadMoreArticles = () => {
     if (nextPage) {
       dispatch(fetchCryptoNews({ limit: 5, nextPageToken: nextPage }));
     }
   };
 
-  // Format publication date
+ 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString(undefined, { 

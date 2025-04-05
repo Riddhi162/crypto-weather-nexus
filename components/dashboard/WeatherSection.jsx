@@ -324,7 +324,6 @@ export default function WeatherSection() {
         )}
       </AnimatePresence>
       
-      {/* Normal Weather Display */}
       <AnimatePresence mode="wait">
         {activeWeather && !cityHasError && (
           <motion.div 
@@ -335,7 +334,6 @@ export default function WeatherSection() {
             transition={{ duration: 0.5 }}
             className="flex flex-col items-center justify-between min-h-64"
           >
-            {/* City name and favorite button */}
             <div className="flex justify-between items-center w-full mb-6">
               <motion.h2 
                 className={`text-3xl font-bold ${getTextColor()}`}
@@ -346,7 +344,6 @@ export default function WeatherSection() {
                 {activeCity}
               </motion.h2>
               <div className="flex gap-2">
-                {/* Favorite heart button */}
                 <button 
                   onClick={() => handleToggleFavorite(activeCity)}
                   className={`transition-colors ${
@@ -361,7 +358,6 @@ export default function WeatherSection() {
               </div>
             </div>
             
-            {/* Main weather display */}
             <motion.div 
               className="flex flex-col items-center mb-8"
               initial={{ opacity: 0, scale: 0.8 }}
@@ -381,7 +377,6 @@ export default function WeatherSection() {
               </motion.div>
             </motion.div>
             
-            {/* Weather details */}
             <motion.div 
               className="w-full backdrop-blur-lg bg-white/5 rounded-xl p-4 flex justify-between items-center shadow-lg"
               initial={{ opacity: 0, y: 20 }}
@@ -418,7 +413,6 @@ export default function WeatherSection() {
         )}
       </AnimatePresence>
       
-      {/* City selector tabs with heart icons */}
       <div className="mt-8">
         <div className="flex overflow-x-auto scrollbar-hide gap-2 pb-2">
           {favoriteCities.map((city) => {
@@ -437,7 +431,6 @@ export default function WeatherSection() {
                     : 'bg-white/5 backdrop-blur-sm hover:bg-white/10'
                 }`}
               >
-                {/* Heart icon for favorite city - small at top right corner */}
                 <div className="absolute -top-1 -right-1">
                   <Heart size={12} className="text-red-500" fill="currentColor" />
                 </div>
@@ -467,7 +460,6 @@ export default function WeatherSection() {
             );
           })}
           
-          {/* Show other cities that are not in favorites but have been searched */}
           {Object.keys(currentWeather)
             .filter(city => !favoriteCities.includes(city))
             .map(city => {
@@ -510,7 +502,6 @@ export default function WeatherSection() {
         </div>
       </div>
       
-      {/* Add city form */}
       <AnimatePresence>
         {showAddForm && (
           <motion.div
@@ -567,7 +558,6 @@ export default function WeatherSection() {
       </AnimatePresence>
     </div>
     
-    {/* Add required animation classes to your tailwind config */}
     <style jsx>{`
       @keyframes float {
         0%, 100% { transform: translateY(0); }

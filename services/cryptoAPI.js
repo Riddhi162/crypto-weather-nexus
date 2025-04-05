@@ -4,7 +4,6 @@ const COINGECKO_BASE_URL = 'https://api.coingecko.com/api/v3';
 const COINGECKO_API_KEY = process.env.NEXT_PUBLIC_COINGECKO_API_KEY;
 
 export const cryptoAPI = {
-  // Get price data for specified cryptocurrencies
   getPrices: async (cryptoIds) => {
     try {
       const response = await axios.get(`${COINGECKO_BASE_URL}/coins/markets`, {
@@ -25,7 +24,6 @@ export const cryptoAPI = {
     }
   },
 
-  // Get detailed data for a specific cryptocurrency
   getCryptoDetails: async (cryptoId) => {
     try {
       const response = await axios.get(`${COINGECKO_BASE_URL}/coins/${cryptoId}`, {
@@ -44,14 +42,13 @@ export const cryptoAPI = {
     }
   },
 
-  // Get historical market data for a cryptocurrency
   getHistoricalData: async (cryptoId, days) => {
     try {
       const response = await axios.get(`${COINGECKO_BASE_URL}/coins/${cryptoId}/market_chart`, {
         params: {
           vs_currency: 'usd',
           days: days,
-          x_cg_demo_api_key: COINGECKO_API_KEY ,// Add API key if you have one
+          x_cg_demo_api_key: COINGECKO_API_KEY ,
 
           interval: days > 30 ? 'daily' : 'hourly'
         }

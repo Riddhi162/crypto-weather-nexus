@@ -4,7 +4,6 @@ const NEWSDATA_API_KEY = process.env.NEXT_PUBLIC_NEWS_API_KEY;
 const BASE_URL = 'https://newsdata.io/api/1/news';
 
 export const newsAPI = {
-  // Get crypto-related news
   getCryptoNews: async (limit = 5, nextPageToken = null) => {
     try {
       const params = {
@@ -13,7 +12,6 @@ export const newsAPI = {
         language: 'en'
       };
       
-      // Only add the nextPage parameter if a token was provided
       if (nextPageToken) {
         params.page = nextPageToken;
       }

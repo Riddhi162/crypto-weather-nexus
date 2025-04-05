@@ -3,31 +3,30 @@ import React from 'react';
 import { Line, LineChart, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 export default function PriceChart({ data, timeRange, color }) {
-  // Format date label based on timeRange
+ 
   const formatXAxis = (tickItem) => {
     if (!tickItem) return '';
     
-    // Format based on time range
+    
     if (timeRange === '1') {
-      // For 24h, show hours
+    
       const date = new Date(tickItem);
       return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     } else if (timeRange === '7') {
-      // For 1 week, show day name
+      
       const date = new Date(tickItem);
       return date.toLocaleDateString([], { weekday: 'short' });
     } else if (timeRange === '30') {
-      // For 1 month, show date
+    
       const date = new Date(tickItem);
       return date.toLocaleDateString([], { day: 'numeric', month: 'short' });
     } else {
-      // For longer periods, show month and year
+     
       const date = new Date(tickItem);
       return date.toLocaleDateString([], { month: 'short', year: '2-digit' });
     }
   };
 
-  // Format price for tooltip
   const formatPrice = (value) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -37,7 +36,7 @@ export default function PriceChart({ data, timeRange, color }) {
     }).format(value);
   };
 
-  // Custom tooltip
+  
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (

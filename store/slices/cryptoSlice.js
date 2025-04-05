@@ -55,7 +55,6 @@ const cryptoSlice = createSlice({
         timestamp: Date.now()
       };
       
-      // Update prices array with live data
       state.prices = state.prices.map(crypto => {
         if (action.payload[crypto.id]) {
           return {
@@ -72,7 +71,6 @@ const cryptoSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Handle fetchCryptoPrices
       .addCase(fetchCryptoPrices.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -86,7 +84,6 @@ const cryptoSlice = createSlice({
         state.error = action.payload || 'Failed to fetch crypto prices';
       })
       
-      // Handle fetchCryptoDetails
       .addCase(fetchCryptoDetails.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -103,7 +100,6 @@ const cryptoSlice = createSlice({
         state.error = action.payload || 'Failed to fetch crypto details';
       })
       
-      // Handle fetchCryptoHistory
       .addCase(fetchCryptoHistory.pending, (state) => {
         state.loading = true;
         state.error = null;

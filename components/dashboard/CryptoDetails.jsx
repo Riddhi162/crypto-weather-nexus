@@ -93,7 +93,6 @@ export default function CryptoDetailsPage() {
       </Head>
 
       <div className="container mx-auto px-4 py-6">
-        {/* Back button and title */}
         <div className="flex items-center mb-6">
           <Link href="/" className="flex items-center text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 mr-4">
             <ArrowLeftIcon className="w-5 h-5 mr-1" />
@@ -125,7 +124,6 @@ export default function CryptoDetailsPage() {
 
         {cryptoDetails && (
           <>
-            {/* Crypto header */}
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
               <div className="flex items-start">
                 <img src={cryptoDetails.image.large} alt={cryptoDetails.name} className="w-16 h-16 mr-4" />
@@ -184,7 +182,6 @@ export default function CryptoDetailsPage() {
                 </div>
               </div>
               
-              {/* Price change percentages */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
                 <div className="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
                   <div className="text-sm text-gray-500 dark:text-gray-400">1h</div>
@@ -232,7 +229,6 @@ export default function CryptoDetailsPage() {
               </div>
             </div>
             
-            {/* Key metrics */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
               <MetricsCard 
                 title="Market Cap" 
@@ -255,7 +251,6 @@ export default function CryptoDetailsPage() {
               />
             </div>
             
-            {/* Additional data table */}
             <MarketDataTable cryptoDetails={cryptoDetails} />
           </>
         )}

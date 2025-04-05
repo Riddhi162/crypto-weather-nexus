@@ -1,4 +1,3 @@
-// store/slices/newsSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { newsAPI } from '../../services/newsAPI';
 
@@ -33,11 +32,9 @@ const newsSlice = createSlice({
       .addCase(fetchCryptoNews.fulfilled, (state, action) => {
         const { results, nextPage } = action.payload;
         
-        // If this is a subsequent page request, append the articles
         if (action.meta.arg.nextPageToken) {
           state.articles = [...state.articles, ...results];
         } else {
-          // Otherwise it's a fresh request, replace all articles
           state.articles = results;
         }
         

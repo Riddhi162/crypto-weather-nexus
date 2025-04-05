@@ -4,7 +4,6 @@ import Notification, { NotificationType } from './Notification';
 const NotificationManager = ({ weatherService, priceService }) => {
   const [notifications, setNotifications] = useState([]);
   
-  // Function to add a new notification
   const addNotification = (type, title, message, duration = 5000) => {
     const id = Date.now().toString();
     setNotifications(prevNotifications => [
@@ -15,14 +14,12 @@ const NotificationManager = ({ weatherService, priceService }) => {
     return id;
   };
   
-  // Function to remove a notification
   const removeNotification = (id) => {
     setNotifications(prevNotifications => 
       prevNotifications.filter(notification => notification.id !== id)
     );
   };
   
-  // Monitor price changes (simulation)
   useEffect(() => {
     if (!priceService) return;
     
@@ -48,17 +45,16 @@ const NotificationManager = ({ weatherService, priceService }) => {
           );
         }
       }
-    }, 30000); // Check every 30 seconds
+    }, 30000);
     
     return () => clearInterval(priceMonitor);
   }, [priceService]);
   
-  // Monitor weather alerts (simulation)
   useEffect(() => {
     if (!weatherService) return;
     
     const weatherAlertCheck = setInterval(() => {
-      // This would be your real weather service integration
+    
       const alerts = weatherService.getActiveAlerts();
       
       alerts.forEach(alert => {
@@ -70,16 +66,15 @@ const NotificationManager = ({ weatherService, priceService }) => {
             10000
           );
           
-          // Mark as notified to prevent duplicate notifications
           weatherService.markAlertAsNotified(alert.id);
         }
       });
-    }, 60000); // Check every minute
+    }, 60000);
     
     return () => clearInterval(weatherAlertCheck);
   }, [weatherService]);
   
-  // Public API for other components to use
+ 
   const api = {
     success: (title, message, duration) => 
       addNotification(NotificationType.SUCCESS, title, message, duration),
@@ -114,7 +109,7 @@ const NotificationManager = ({ weatherService, priceService }) => {
     remove: (id) => removeNotification(id)
   };
   
-  // Expose the API globally for testing
+
   useEffect(() => {
     window.notificationApi = api;
     return () => { delete window.notificationApi; };

@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { weatherAPI } from '../../services/weatherAPI';
 
-// Async thunks for API calls
 export const fetchCityWeather = createAsyncThunk(
   'weather/fetchCityWeather',
   async (city, { rejectWithValue }) => {
@@ -30,15 +29,12 @@ export const fetchWeatherHistory = createAsyncThunk(
   'weather/fetchWeatherHistory',
   async ({ lat, lon, days = 7 }, { rejectWithValue }) => {
     try {
-      // Getting historical data for the past 'days'
       const endDate = Math.floor(Date.now() / 1000);
       const data = [];
       
-      // OpenWeatherMap's free tier doesn't support bulk historical requests
-      // We make separate calls for each day (limited to 5 calls per day for free tier)
       const daysToFetch = Math.min(days, 5);
       for (let i = 1; i <= daysToFetch; i++) {
-        const timestamp = endDate - (i * 86400); // 86400 seconds in a day
+        const timestamp = endDate - (i * 86400);
         const dayData = await weatherAPI.getWeatherHistory(lat, lon, timestamp);
         data.push(dayData);
       }
@@ -63,7 +59,6 @@ const weatherSlice = createSlice({
   reducers: {
     addWeatherAlert: (state, action) => {
       state.alerts.unshift(action.payload);
-      // Keep only the 10 most recent alerts
       if (state.alerts.length > 10) {
         state.alerts.pop();
       }
@@ -74,7 +69,6 @@ const weatherSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Handle fetchCityWeather
       .addCase(fetchCityWeather.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -91,7 +85,6 @@ const weatherSlice = createSlice({
         state.error = action.payload || 'Failed to fetch weather data';
       })
       
-      // Handle fetchCityForecast
       .addCase(fetchCityForecast.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -108,7 +101,6 @@ const weatherSlice = createSlice({
         state.error = action.payload || 'Failed to fetch forecast data';
       })
       
-      // Handle fetchWeatherHistory
       .addCase(fetchWeatherHistory.pending, (state) => {
         state.loading = true;
         state.error = null;

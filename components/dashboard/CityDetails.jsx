@@ -144,7 +144,6 @@ export default function CityDetails() {
     <div className={`min-h-screen ${getBackgroundGradient()} p-4 md:p-8`}>
       
       <div className="max-w-4xl mx-auto">
-        {/* Header with back button */}
         <div className="flex items-center mb-8">
           <button 
             onClick={handleGoBack} 
@@ -167,7 +166,6 @@ export default function CityDetails() {
         
         {cityData && (
           <>
-            {/* Current weather summary */}
             <div className="bg-white/20 backdrop-blur-md rounded-xl p-6 mb-8 shadow-xl">
               <div className="flex flex-col md:flex-row items-center justify-between">
                 <div className="flex items-center mb-4 md:mb-0">
@@ -207,7 +205,6 @@ export default function CityDetails() {
               </div>
             </div>
             
-            {/* Tab navigation */}
             <div className="flex mb-6">
             <Button
   title="5-Day Forecast"
@@ -222,9 +219,7 @@ export default function CityDetails() {
              
             </div>
             
-            {/* Main content area */}
             <div className="bg-white/20 backdrop-blur-md rounded-xl p-6 shadow-xl">
-              {/* View toggle buttons */}
               <div className="flex justify-end mb-6">
                 <div className="bg-white/10 backdrop-blur-sm rounded-lg p-1 inline-flex">
                   <button
@@ -250,7 +245,6 @@ export default function CityDetails() {
                 </div>
               </div>
               
-              {/* Forecast content */}
               {activeTab === 'forecast' && (
                 <div>
                   {processedForecastData ? (
@@ -391,7 +385,6 @@ export default function CityDetails() {
                 </div>
               )}
               
-              {/* History content */}
              
             </div>
           </>

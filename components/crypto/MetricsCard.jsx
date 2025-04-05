@@ -3,7 +3,7 @@ import React from 'react';
 import { TrendingUpIcon, TrendingDownIcon } from 'lucide-react';
 
 export default function MetricsCard({ title, value, changePercentage, secondaryValue }) {
-  // Format percentage change
+ 
   const formatPercentage = (value) => {
     if (value === undefined || value === null) return null;
     return `${value > 0 ? '+' : ''}${value.toFixed(2)}%`;

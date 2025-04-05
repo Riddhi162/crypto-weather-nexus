@@ -24,7 +24,6 @@ export default function MarketDataTable({ cryptoDetails }) {
       <h2 className="text-xl font-bold mb-6 dark:text-white">Market Data</h2>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Left column */}
         <div>
           <table className="w-full">
             <tbody>
@@ -84,7 +83,6 @@ export default function MarketDataTable({ cryptoDetails }) {
           </table>
         </div>
         
-        {/* Right column */}
         <div>
           <table className="w-full">
             <tbody>
@@ -123,7 +121,6 @@ export default function MarketDataTable({ cryptoDetails }) {
         </div>
       </div>
       
-      {/* Description */}
       {cryptoDetails.description?.en && (
         <div className="mt-8">
           <h3 className="text-lg font-medium mb-3 dark:text-white">About {cryptoDetails.name}</h3>

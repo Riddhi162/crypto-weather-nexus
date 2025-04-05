@@ -6,7 +6,6 @@ export class CryptoWebSocketService {
     }
   
     connect(cryptoIds = ['bitcoin', 'ethereum', 'solana']) {
-      // CoinCap WebSocket API
       const url = `wss://ws.coincap.io/prices?assets=${cryptoIds.join(',')}`;
       
       this.socket = new WebSocket(url);
@@ -31,7 +30,6 @@ export class CryptoWebSocketService {
         console.log('WebSocket disconnected');
         this.isConnected = false;
         
-        // Attempt to reconnect after 5 seconds
         setTimeout(() => {
           if (!this.isConnected) {
             this.connect(cryptoIds);
@@ -48,7 +46,6 @@ export class CryptoWebSocketService {
     }
   }
   
-  // Mock weather alerts WebSocket service
   export class WeatherAlertService {
     constructor(onAlertCallback) {
       this.onAlertCallback = onAlertCallback;
@@ -59,7 +56,6 @@ export class CryptoWebSocketService {
     start(cities) {
       this.cities = cities;
       
-      // Simulate occasional weather alerts
       this.interval = setInterval(() => {
         if (Math.random() > 0.7 && this.cities.length > 0) {
           const randomCity = this.cities[Math.floor(Math.random() * this.cities.length)];
@@ -69,7 +65,7 @@ export class CryptoWebSocketService {
           const alert = {
             city: randomCity,
             type: alertType,
-            severity: Math.floor(Math.random() * 5) + 1, // 1-5
+            severity: Math.floor(Math.random() * 5) + 1,
             message: `${alertType} warning for ${randomCity}`,
             timestamp: new Date().toISOString()
           };
@@ -78,7 +74,7 @@ export class CryptoWebSocketService {
             this.onAlertCallback(alert);
           }
         }
-      }, 30000); // Check every 30 seconds
+      }, 30000);
     }
   
     stop() {
