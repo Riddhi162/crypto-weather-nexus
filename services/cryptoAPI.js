@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const COINGECKO_BASE_URL = 'https://api.coingecko.com/api/v3';
+const COINGECKO_API_KEY = process.env.NEXT_PUBLIC_COINGECKO_API_KEY;
 
 export const cryptoAPI = {
   // Get price data for specified cryptocurrencies
@@ -50,6 +51,8 @@ export const cryptoAPI = {
         params: {
           vs_currency: 'usd',
           days: days,
+          x_cg_demo_api_key: COINGECKO_API_KEY ,// Add API key if you have one
+
           interval: days > 30 ? 'daily' : 'hourly'
         }
       });

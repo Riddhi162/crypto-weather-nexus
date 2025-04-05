@@ -1,11 +1,13 @@
 // components/dashboard/CryptoSection.jsx
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
 import { fetchCryptoPrices } from '../../store/slices/cryptoSlice';
 import { addFavoriteCrypto, removeFavoriteCrypto } from '../../store/slices/userPreferencesSlice';
 import { ArrowUpIcon, ArrowDownIcon, StarIcon } from 'lucide-react';
 import React from 'react';
+import Button from '../common/Button';
+import { CryptoWebSocketService } from '../../services/websocketService'; // Import the WebSocket service
 
 export default function CryptoSection() {
   const dispatch = useDispatch();
@@ -13,23 +15,53 @@ export default function CryptoSection() {
   const { favoriteCryptos } = useSelector((state) => state.userPreferences);
   const [newCrypto, setNewCrypto] = useState('');
   const [showAddForm, setShowAddForm] = useState(false);
+  const [realTimePrices, setRealTimePrices] = useState({});
+  const wsServiceRef = useRef(null);
 
   // List of default cryptos to track
   const defaultCryptos = ['bitcoin', 'ethereum', 'solana'];
 
-  // Initial data fetch
+  // Handle real-time price updates from WebSocket
+  const handleWebSocketMessage = (data) => {
+    setRealTimePrices(prevPrices => ({ ...prevPrices, ...data }));
+  };
+
+  // Initial data fetch and WebSocket setup
   useEffect(() => {
     // Get tracked cryptos (default + favorites)
     const cryptosToTrack = [...new Set([...defaultCryptos, ...favoriteCryptos])];
+    
+    // Fetch initial data
     dispatch(fetchCryptoPrices(cryptosToTrack));
 
-    // Set up interval to refresh data every 60 seconds
+    // Set up WebSocket connection
+    if (!wsServiceRef.current) {
+      wsServiceRef.current = new CryptoWebSocketService(handleWebSocketMessage);
+    }
+    wsServiceRef.current.connect(cryptosToTrack);
+
+    // Set up interval to refresh full data every 60 seconds as a fallback
     const intervalId = setInterval(() => {
       dispatch(fetchCryptoPrices(cryptosToTrack));
     }, 60000);
 
-    return () => clearInterval(intervalId);
+    // Clean up on unmount
+    return () => {
+      clearInterval(intervalId);
+      if (wsServiceRef.current) {
+        wsServiceRef.current.disconnect();
+      }
+    };
   }, [dispatch, favoriteCryptos]);
+
+  // When favorites change, reconnect WebSocket with updated cryptos
+  useEffect(() => {
+    if (wsServiceRef.current && wsServiceRef.current.isConnected) {
+      const cryptosToTrack = [...new Set([...defaultCryptos, ...favoriteCryptos])];
+      wsServiceRef.current.disconnect();
+      wsServiceRef.current.connect(cryptosToTrack);
+    }
+  }, [favoriteCryptos]);
 
   // Handle adding a new crypto to track
   const handleAddCrypto = (e) => {
@@ -71,16 +103,31 @@ export default function CryptoSection() {
     }
   };
 
+  // Get the most up-to-date price (either from WebSocket or API)
+  const getCurrentPrice = (crypto) => {
+    // If we have real-time data for this crypto, use it
+    if (realTimePrices[crypto.id]) {
+      return parseFloat(realTimePrices[crypto.id]);
+    }
+    // Otherwise fall back to API data
+    return crypto.current_price;
+  };
+
+  // Check if price has changed in real-time
+  const hasPriceChanged = (crypto) => {
+    return realTimePrices[crypto.id] !== undefined;
+  };
+
   return (
     <div className="crypto-section bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold dark:text-white">Cryptocurrency</h2>
-        <button
+        <Button
+          title={showAddForm ? 'Cancel' : '+ Add'}
+          variant="primary"
+          size="small"
           onClick={() => setShowAddForm(!showAddForm)}
-          className="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
-        >
-          {showAddForm ? 'Cancel' : '+ Add'}
-        </button>
+        />
       </div>
 
       {showAddForm && (
@@ -116,9 +163,15 @@ export default function CryptoSection() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {prices.map((crypto) => {
+          // Get the current price (either from WebSocket or API)
+          const currentPrice = getCurrentPrice(crypto);
+          
           // Calculate price change
           const priceChange = crypto.price_change_percentage_24h;
           const isPriceUp = priceChange > 0;
+          
+          // Check if price is being updated in real-time
+          const isRealTime = hasPriceChanged(crypto);
 
           return (
             <div 
@@ -127,7 +180,9 @@ export default function CryptoSection() {
                 favoriteCryptos.includes(crypto.id) 
                   ? 'border-yellow-400 dark:border-yellow-600' 
                   : 'border-gray-200 dark:border-gray-700'
-              } relative transition-all hover:shadow-md`}
+              } relative transition-all hover:shadow-md ${
+                isRealTime ? 'bg-blue-50 dark:bg-blue-900/10' : ''
+              }`}
             >
               <div className="flex justify-between items-start">
                 <div className="flex items-center">
@@ -156,8 +211,13 @@ export default function CryptoSection() {
               </div>
               
               <div className="mt-3">
-                <div className="text-lg font-bold dark:text-white">
-                  {formatPrice(crypto.current_price)}
+                <div className={`text-lg font-bold dark:text-white ${
+                  isRealTime ? 'animate-pulse' : ''
+                }`}>
+                  {formatPrice(currentPrice)}
+                  {isRealTime && (
+                    <span className="ml-2 text-xs text-blue-500 dark:text-blue-400">LIVE</span>
+                  )}
                 </div>
                 <div className={`flex items-center text-sm ${
                   isPriceUp ? 'text-green-500' : 'text-red-500'
@@ -179,7 +239,11 @@ export default function CryptoSection() {
                 href={`/crypto/${crypto.id}`}
                 className="mt-3 text-sm text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 block"
               >
-                View Details →
+                <Button
+                  title="View Details"
+                  variant="secondary"
+                  className="w-1/2"
+                />
               </Link>
             </div>
           );
@@ -189,6 +253,12 @@ export default function CryptoSection() {
       {prices.length === 0 && !loading && !error && (
         <div className="text-center py-8 text-gray-500 dark:text-gray-400">
           No cryptocurrency data available. Click "Add" to track cryptocurrencies.
+        </div>
+      )}
+      
+      {wsServiceRef.current && wsServiceRef.current.isConnected && (
+        <div className="mt-4 text-xs text-right text-green-500 dark:text-green-400">
+          Live updates active
         </div>
       )}
     </div>

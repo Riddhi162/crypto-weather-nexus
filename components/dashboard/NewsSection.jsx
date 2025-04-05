@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchCryptoNews } from '../../store/slices/newsSlice';
 import { ExternalLink } from 'lucide-react';
 import React from 'react';
-
+import Button from '../common/Button';
 export default function NewsSection() {
   const dispatch = useDispatch();
   const { articles, loading, error, lastFetched, nextPage } = useSelector((state) => state.news);
@@ -104,13 +104,14 @@ export default function NewsSection() {
 
       {articles.length > 0 && nextPage && (
         <div className="mt-4 text-center">
-          <button 
-            onClick={loadMoreArticles}
-            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
-            disabled={loading}
-          >
-            {loading ? 'Loading...' : 'Load More'}
-          </button>
+          <Button
+  title={loading ? 'Loading...' : 'Load More'}
+  variant="primary"
+  size="medium"
+  onClick={loadMoreArticles}
+  isLoading={loading}
+  isDisabled={loading}
+/>
         </div>
       )}
 

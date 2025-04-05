@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const NEWSDATA_API_KEY = process.env.NEWSDATA_API_KEY;
+const NEWSDATA_API_KEY = process.env.NEXT_PUBLIC_NEWS_API_KEY;
 const BASE_URL = 'https://newsdata.io/api/1/news';
 
 export const newsAPI = {

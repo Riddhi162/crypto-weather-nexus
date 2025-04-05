@@ -5,6 +5,9 @@ import { useParams } from 'react-router-dom';
 import { ArrowLeft, Calendar, BarChart2, Table, Thermometer, Droplets, Wind, CloudRain } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { useRouter } from 'next/router';
+import Navbar from '../common/Navbar';
+import Footer from '../common/Footer';
+import Button from '../common/Button';
 export default function CityDetails() {
     const router = useRouter();
     const { cityName } = router.query; // Get route parameter
@@ -136,7 +139,10 @@ export default function CityDetails() {
   };
   
   return (
+    <div>
+      <Navbar/>
     <div className={`min-h-screen ${getBackgroundGradient()} p-4 md:p-8`}>
+      
       <div className="max-w-4xl mx-auto">
         {/* Header with back button */}
         <div className="flex items-center mb-8">
@@ -203,29 +209,17 @@ export default function CityDetails() {
             
             {/* Tab navigation */}
             <div className="flex mb-6">
-              <button 
-                onClick={() => setActiveTab('forecast')} 
-                className={`flex items-center px-4 py-2 rounded-t-lg ${
-                  activeTab === 'forecast' 
-                    ? 'bg-white/30 backdrop-blur-md font-medium' 
-                    : 'bg-white/10 backdrop-blur-sm hover:bg-white/20'
-                } mr-2 transition-colors`}
-              >
-                <Calendar size={18} className="mr-2" />
-                <span className={getTextColor()}>5-Day Forecast</span>
-              </button>
+            <Button
+  title="5-Day Forecast"
+  variant="tertiary"
+  size="medium"
+  isActive={activeTab === 'forecast'}
+  onClick={() => setActiveTab('forecast')}
+  leftIcon={<Calendar size={18} />}
+  
+/>
               
-              <button 
-                onClick={() => setActiveTab('history')} 
-                className={`flex items-center px-4 py-2 rounded-t-lg ${
-                  activeTab === 'history' 
-                    ? 'bg-white/30 backdrop-blur-md font-medium' 
-                    : 'bg-white/10 backdrop-blur-sm hover:bg-white/20'
-                } transition-colors`}
-              >
-                <BarChart2 size={18} className="mr-2" />
-                <span className={getTextColor()}>Weather History</span>
-              </button>
+             
             </div>
             
             {/* Main content area */}
@@ -398,133 +392,13 @@ export default function CityDetails() {
               )}
               
               {/* History content */}
-              {activeTab === 'history' && (
-                <div>
-                  {processedHistoryData ? (
-                    <>
-                      {viewMode === 'chart' ? (
-                        <div className="mb-8">
-                          <h3 className={`text-xl font-medium mb-4 ${getTextColor()}`}>Temperature History</h3>
-                          <div className="h-72 bg-white/10 backdrop-blur-md rounded-lg p-4">
-                            <ResponsiveContainer width="100%" height="100%">
-                              <LineChart 
-                                data={[...processedHistoryData].reverse()}
-                                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-                              >
-                                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.2)" />
-                                <XAxis 
-                                  dataKey="date" 
-                                  stroke={getTextColor()} 
-                                  tick={{ fill: getTextColor() }}
-                                />
-                                <YAxis stroke={getTextColor()} tick={{ fill: getTextColor() }} />
-                                <Tooltip 
-                                  contentStyle={{ backgroundColor: 'rgba(255,255,255,0.8)', borderRadius: '8px' }} 
-                                  formatter={(value) => [`${value}°F`]} 
-                                />
-                                <Legend />
-                                <Line 
-                                  type="monotone" 
-                                  dataKey="temp" 
-                                  name="Temperature" 
-                                  stroke="#ff7300" 
-                                  activeDot={{ r: 8 }} 
-                                />
-                                <Line 
-                                  type="monotone" 
-                                  dataKey="feelsLike" 
-                                  name="Feels Like" 
-                                  stroke="#82ca9d" 
-                                />
-                              </LineChart>
-                            </ResponsiveContainer>
-                          </div>
-                          
-                          <h3 className={`text-xl font-medium my-4 ${getTextColor()}`}>Humidity History</h3>
-                          <div className="h-72 bg-white/10 backdrop-blur-md rounded-lg p-4">
-                            <ResponsiveContainer width="100%" height="100%">
-                              <LineChart 
-                                data={[...processedHistoryData].reverse()}
-                                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-                              >
-                                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.2)" />
-                                <XAxis 
-                                  dataKey="date" 
-                                  stroke={getTextColor()} 
-                                  tick={{ fill: getTextColor() }}
-                                />
-                                <YAxis stroke={getTextColor()} tick={{ fill: getTextColor() }} />
-                                <Tooltip 
-                                  contentStyle={{ backgroundColor: 'rgba(255,255,255,0.8)', borderRadius: '8px' }} 
-                                  formatter={(value) => [`${value}%`]} 
-                                />
-                                <Legend />
-                                <Line 
-                                  type="monotone" 
-                                  dataKey="humidity" 
-                                  name="Humidity" 
-                                  stroke="#8884d8" 
-                                />
-                              </LineChart>
-                            </ResponsiveContainer>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="overflow-x-auto">
-                          <table className="w-full">
-                            <thead>
-                              <tr className="bg-white/10 backdrop-blur-sm">
-                                <th className={`p-3 text-left ${getTextColor()}`}>Date</th>
-                                <th className={`p-3 text-left ${getTextColor()}`}>Conditions</th>
-                                <th className={`p-3 text-left ${getTextColor()}`}>Temp</th>
-                                <th className={`p-3 text-left ${getTextColor()}`}>Feels Like</th>
-                                <th className={`p-3 text-left ${getTextColor()}`}>Humidity</th>
-                                <th className={`p-3 text-left ${getTextColor()}`}>Wind</th>
-                                <th className={`p-3 text-left ${getTextColor()}`}>Pressure</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {[...processedHistoryData].reverse().map((item, idx) => (
-                                <tr 
-                                  key={idx} 
-                                  className={`border-b border-white/10 ${
-                                    idx % 2 === 0 ? 'bg-white/5' : 'bg-transparent'
-                                  }`}
-                                >
-                                  <td className={`p-3 ${getTextColor()}`}>{formatDate(item.date)}</td>
-                                  <td className={`p-3 ${getTextColor()}`}>
-                                    <div className="flex items-center">
-                                      <img 
-                                        src={getWeatherIconUrl(item.icon)} 
-                                        alt={item.description} 
-                                        className="w-10 h-10 mr-2"
-                                      />
-                                      <span className="capitalize">{item.description}</span>
-                                    </div>
-                                  </td>
-                                  <td className={`p-3 ${getTextColor()}`}>{formatTemp(item.temp)}</td>
-                                  <td className={`p-3 ${getTextColor()}`}>{formatTemp(item.feelsLike)}</td>
-                                  <td className={`p-3 ${getTextColor()}`}>{item.humidity}%</td>
-                                  <td className={`p-3 ${getTextColor()}`}>{item.windSpeed} mph</td>
-                                  <td className={`p-3 ${getTextColor()}`}>{item.pressure} hPa</td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      )}
-                    </>
-                  ) : (
-                    <div className="flex justify-center items-center h-64">
-                      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-white"></div>
-                    </div>
-                  )}
-                </div>
-              )}
+             
             </div>
           </>
         )}
       </div>
+    </div>
+    <Footer/>
     </div>
   );
 }
